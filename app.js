@@ -18,7 +18,7 @@ var app = express();
 
 var config = require('./config');
 
-var GoogleAuth = require('./simple-google-express-auth')(app);
+var GoogleAuth = require('./Auth.js')(app);
 var AuthCheck = GoogleAuth.AuthCheck;
 
 
