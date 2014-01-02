@@ -1,3 +1,10 @@
+# a Mongo DB browser for Node.js
+
+- Uses Google authentication
+
+
+# Forked from [mongo-express](https://github.com/andzdroid/mongo-express)
+
 mongo-express
 =============
 
