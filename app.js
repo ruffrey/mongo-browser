@@ -18,6 +18,10 @@ var app = express();
 
 var config = require('./config');
 
+var GoogleAuth = require('./simple-google-express-auth')(app);
+var AuthCheck = GoogleAuth.AuthCheck;
+
+
 //Set up swig
 app.engine('html', cons.swig);
 swig.init({
@@ -38,6 +42,10 @@ app.configure(function(){
   app.use(express.cookieParser(config.site.cookieSecret));
   app.use(express.session({ secret: config.site.sessionSecret }));
   app.use(express.methodOverride());
+
+  // 
+  GoogleAuth.initialize();
+
   app.use(app.router);
 });
 
@@ -187,6 +195,7 @@ db.open(function(err, db) {
   }
 });
 
+
 //View helper, sets local variables used in templates
 app.all('*', function(req, res, next) {
   res.locals.baseHref = config.site.baseUrl;
@@ -289,7 +298,21 @@ var middleware = function(req, res, next) {
 };
 
 //Routes
+
+
+// authentication with Google
+app.get('/login', function(req, res) {
+    res.render('login', {});
+});
+
+
+app.all('/*', AuthCheck);
+
+
+
 app.get(config.site.baseUrl, middleware,  routes.index);
+
+
 
 app.get(config.site.baseUrl+'db/:database/:collection/:document', middleware, routes.viewDocument);
 app.put(config.site.baseUrl+'db/:database/:collection/:document', middleware, routes.updateDocument);
